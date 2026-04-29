@@ -1,36 +1,30 @@
 name: Upstream Sync
 
-# 触发规则：每天自动同步 + 支持手动触发
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天UTC 0点（北京时间8点）自动同步，可自定义
-  workflow_dispatch:      # 开启手动触发按钮
+    - cron: '0 0 * * *'  # 每天自动同步，可自定义时间
+  workflow_dispatch:      # 保留手动触发功能
 
 jobs:
   sync-upstream:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # 给工作流仓库写入权限，避免推送失败
+      contents: write
     steps:
-      # 【必须加的步骤】拉取你的仓库代码，创建Git环境
       - name: 检出仓库代码
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 拉取完整历史，避免同步冲突
-          ref: main        # 对应你要同步的目标分支
+          fetch-depth: 0
+          ref: main
 
-      # 上游同步核心步骤，使用官方要求的正确参数名
       - name: 同步上游仓库代码
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
         with:
-          # 上游仓库地址（必填，格式：所有者/仓库名）
           upstream_sync_repo: mtvpls/MoonTVPlus
-          # 上游仓库要同步的分支
           upstream_sync_branch: main
-          # 你的仓库接收同步的目标分支
           target_sync_branch: main
-          # 仓库操作权限Token，无需修改
           target_repo_token: ${{ secrets.GITHUB_TOKEN }}
-          # 自动设置Git提交信息，无需修改
           git_config_user: github-actions[bot]
           git_config_email: github-actions[bot]@users.noreply.github.com
+          # 核心修复：添加允许合并不相关历史的参数，解决本次报错
+          upstream_pull_args: '--allow-unrelated-histories'
