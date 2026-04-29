@@ -13,12 +13,11 @@ jobs:
       - name: 同步上游仓库代码
         uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
         with:
-          # 必填：上游仓库地址，格式为 仓库所有者/仓库名
-          mtvpls/MoonTVPlus: 这里替换成你的上游仓库，比如 xxx/xxx-repo
-          # 必填：上游要同步的分支名（比如main/master）
-          Yincixia/homersepics: main
-          # 必填：你自己仓库要接收同步的分支名
+          # 上游仓库地址，固定格式：仓库所有者/仓库名
+          upstream_repository: mtvpls/MoonTVPlus
+          # 上游仓库要同步的分支名（上游是main就填main，是master就改master）
+          upstream_branch: main
+          # 你的仓库接收同步的目标分支名
           target_branch: main
-          # GitHub自动生成的密钥，无需修改，直接用
+          # GitHub内置密钥，无需修改，直接保留即可
           github_token: ${{ secrets.GITHUB_TOKEN }}
- 
