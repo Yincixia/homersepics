@@ -1,0 +1,24 @@
+name: Upstream Sync
+
+# 触发规则：每天自动同步 + 支持手动点击触发
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天UTC 0点（北京时间8点）自动同步，可自定义时间
+  workflow_dispatch:      # 开启手动触发，在Actions页面可以直接点按钮运行
+
+jobs:
+  sync-upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 同步上游仓库代码
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4
+        with:
+          # 必填：上游仓库地址，格式为 仓库所有者/仓库名
+          mtvpls/MoonTVPlus: 这里替换成你的上游仓库，比如 xxx/xxx-repo
+          # 必填：上游要同步的分支名（比如main/master）
+          Yincixia/homersepics: main
+          # 必填：你自己仓库要接收同步的分支名
+          target_branch: main
+          # GitHub自动生成的密钥，无需修改，直接用
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+ 
